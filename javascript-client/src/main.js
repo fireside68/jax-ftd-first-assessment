@@ -1,1 +1,3 @@
-console.log('webpack and babel wooooo')
+import assessment from './assessment'
+
+assessment.show()
