@@ -2,6 +2,10 @@ package com.cooksys.ftd.assessment.filesharing.model;
 
 import java.util.Arrays;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+@XmlRootElement
 public class Files {
 	
 	private int fileID;
@@ -15,18 +19,21 @@ public class Files {
 		this.filepath = filepath;
 		this.fileContents = fileContents;
 	}
+	@XmlAttribute
 	public int getFileID() {
 		return fileID;
 	}
 	public void setFileID(int fileID) {
 		this.fileID = fileID;
 	}
+	@XmlElement
 	public String getFilepath() {
 		return filepath;
 	}
 	public void setFilepath(String filepath) {
 		this.filepath = filepath;
 	}
+	@XmlElement
 	public byte[] getFileContents() {
 		return fileContents;
 	}

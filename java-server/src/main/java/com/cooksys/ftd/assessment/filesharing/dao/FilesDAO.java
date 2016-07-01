@@ -5,13 +5,16 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import com.cooksys.ftd.assessment.filesharing.model.Files;
-import com.cooksys.ftd.assessment.filesharing.model.User;
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
+import com.cooksys.ftd.assessment.filesharing.model.Files;
+
+@XmlRootElement
 public class FilesDAO extends AbstractDAO {
 
 	private int fileID;
@@ -59,7 +62,8 @@ public class FilesDAO extends AbstractDAO {
 		return Optional.ofNullable(null);
 		}
 	}
-
+	
+	@XmlAttribute
 	public int getFileID() {
 		return fileID;
 	}
@@ -67,7 +71,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFileID(int fileID) {
 		this.fileID = fileID;
 	}
-
+	@XmlElement
 	public String getFilepath() {
 		return filepath;
 	}
@@ -75,7 +79,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFilepath(String filepath) {
 		this.filepath = filepath;
 	}
-
+	@XmlElement
 	public Files getFiles() {
 		return files;
 	}
@@ -83,7 +87,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFiles(Files files) {
 		this.files = files;
 	}
-
+	@XmlElement
 	public List<Files> getFilesList() {
 		return filesList;
 	}
@@ -91,7 +95,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFilesList(List<Files> filesList) {
 		this.filesList = filesList;
 	}
-
+	@XmlElement
 	public byte[] getFileContents() {
 		return fileContents;
 	}

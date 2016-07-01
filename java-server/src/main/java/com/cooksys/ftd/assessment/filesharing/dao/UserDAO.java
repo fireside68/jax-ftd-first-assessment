@@ -6,8 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Optional;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
 import com.cooksys.ftd.assessment.filesharing.model.User;
 
+@XmlRootElement
 public class UserDAO extends AbstractDAO {
 	
 	private int userID;
@@ -51,7 +56,8 @@ public class UserDAO extends AbstractDAO {
 		return Optional.ofNullable(null);
 		}
 	}
-
+	
+	@XmlAttribute
 	public int getUserID() {
 		return userID;
 	}
@@ -59,7 +65,7 @@ public class UserDAO extends AbstractDAO {
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}
-
+	@XmlElement
 	public String getUsername() {
 		return username;
 	}
@@ -68,7 +74,7 @@ public class UserDAO extends AbstractDAO {
 		this.username = username;
 	}
 	
-
+	@XmlElement
 	public String getPassword() {
 		return password;
 	}

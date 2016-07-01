@@ -1,6 +1,6 @@
 package com.cooksys.ftd.assessment.filesharing.dao;
 
-
+@XmlRootElement
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
 
 import com.cooksys.ftd.assessment.filesharing.model.Files;
 import com.cooksys.ftd.assessment.filesharing.model.User;
@@ -45,7 +48,8 @@ public class UserFilesDAO extends AbstractDAO {
 		
 		return null;
 	}
-
+	
+	@XmlAttribute
 	public int getUserID() {
 		return userID;
 	}
@@ -53,7 +57,8 @@ public class UserFilesDAO extends AbstractDAO {
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}
-
+	
+	@XmlAttribute
 	public int getFileID() {
 		return fileID;
 	}
@@ -61,7 +66,8 @@ public class UserFilesDAO extends AbstractDAO {
 	public void setFileID(int fileID) {
 		this.fileID = fileID;
 	}
-
+	
+	@XmlElement
 	public User getUser() {
 		return user;
 	}
@@ -69,7 +75,8 @@ public class UserFilesDAO extends AbstractDAO {
 	public void setUser(User user) {
 		this.user = user;
 	}
-
+	
+	@XmlElement
 	public Files getFile() {
 		return file;
 	}
@@ -79,7 +86,7 @@ public class UserFilesDAO extends AbstractDAO {
 	}
 	
 	
-
+	@XmlElement
 	public List<Files> getFiles() {
 		return files;
 	}

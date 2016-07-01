@@ -1,5 +1,10 @@
 package com.cooksys.ftd.assessment.filesharing.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class User {
 	
 	private int userID;
@@ -9,24 +14,27 @@ public class User {
 	public User() {
 		super();
 	}
+	
 	public User(int userID, String username, String password) {
 		this.userID = userID;
 		this.username = username;
 		this.password = password;
 	}
+	@XmlAttribute
 	public int getUserID() {
 		return userID;
 	}
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}
+	@XmlElement
 	public String getUsername() {
 		return username;
 	}
 	public void setUsername(String username) {
 		this.username = username;
 	}
-	
+	@XmlElement
 	public String getPassword() {
 		return password;
 	}

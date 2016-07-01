@@ -30,18 +30,23 @@ public class ClientHandler implements Runnable, Closeable {
 	private FilesDAO filesDAO;
 	private String username;
 	
+	public ClientHandler() {
+		super();
+	}
+	
 	public ClientHandler(Socket client) throws IOException {
 		this.client = client;
 		this.writer = new PrintWriter(client.getOutputStream(), true);
 		this.reader = new BufferedReader(new InputStreamReader(client.getInputStream()));
 	}
+	
 
 	@Override
 	public void run() {
 		try {
 			log.info("handling client {}", this.client.getRemoteSocketAddress());
-			this.username = reader.readLine();
-			String connected = this.username + " connected";
+			String connected = this.reader.readLine();
+			log.info("{}", connected);
 		} catch (IOException e) {
 			log.error("We have an error somewhere...", e);
 		}

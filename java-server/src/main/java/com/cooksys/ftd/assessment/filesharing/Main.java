@@ -24,18 +24,19 @@ public class Main {
 	private static String url = "jdbc:mysql://localhost:3306/assessment_cj";
 	private static String username = "root";
 	private static String password = "bondstone";
+	
+	private static final int port = 667;
 
 	public static void main(String[] args) throws ClassNotFoundException {
+		
+		log.info("It's alive.  ALIVE!!!");
 
-		Class.forName(driver); // register jdbc driver class
-		ExecutorService executor = Executors.newCachedThreadPool(); // initialize
-																	// thread
-																	// pool
-
+		Class.forName(driver);
+		ExecutorService executor = Executors.newCachedThreadPool(); 
 		try (Connection conn = DriverManager.getConnection(url, username, password)) {
 
-			Server server = new Server(); // init server
-
+			Server server = new Server();
+			server.setPort(port);
 			server.setExecutor(executor);
 
 			UserDAO userDAO = new UserDAO();

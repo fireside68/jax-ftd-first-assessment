@@ -1,5 +1,9 @@
 package com.cooksys.ftd.assessment.filesharing.model;
 
+import javax.xml.bind.annotation.XmlAttribute;
+import javax.xml.bind.annotation.XmlRootElement;
+
+@XmlRootElement
 public class UserFiles {
 	
 	private int userID;
@@ -12,12 +16,14 @@ public class UserFiles {
 		this.userID = userID;
 		this.fileID = fileID;
 	}
+	@XmlAttribute
 	public int getUserID() {
 		return userID;
 	}
 	public void setUserID(int userID) {
 		this.userID = userID;
 	}
+	@XmlAttribute
 	public int getFileID() {
 		return fileID;
 	}

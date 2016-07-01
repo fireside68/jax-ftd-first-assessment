@@ -24,10 +24,11 @@ public class Server implements Runnable {
 
 	private ExecutorService executor;
 	private ServerSocket serverSocket;
-	private ClientHandler handler;
 	private UserDAO userDAO;
 	private FilesDAO filesDAO;
 	private UserFilesDAO userFilesDAO;
+
+	private int port;
 
 	public Server() {
 		super();
@@ -36,30 +37,28 @@ public class Server implements Runnable {
 
 	@Override
 	public void run() {
-		try (ServerSocket serverSocket = new ServerSocket(667)) {
-
+		try (ServerSocket serverSocket = new ServerSocket(this.port)) {
+			this.log.info("Client connected");
 			while (true) {
 				Socket clientSocket = serverSocket.accept();
-				handler = new ClientHandler(clientSocket);
-				this.userDAO = handler.getUserDAO();
-				this.filesDAO = handler.getFilesDAO();
-				this.userFilesDAO = handler.getUserFilesDAO();
-				this.log.info("Client connected {}", clientSocket.getRemoteSocketAddress());
-				
-				
-				this.executor.execute(handler);
+				ClientHandler clientHandler = this.createClientHandler(clientSocket);
+				this.executor.execute(clientHandler);
 			}
 		} catch (IOException e) {
-
+			log.error("You have reached a number that has been disconnected.", e);
 		}
 	}
-
-	public Logger getLog() {
-		return log;
-	}
-
-	public void setLog(Logger log) {
-		this.log = log;
+	
+	public ClientHandler createClientHandler(Socket socket) throws IOException {
+		ClientHandler handler = new ClientHandler();
+		
+		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+		handler.setReader(reader);
+		PrintWriter writer = new PrintWriter(socket.getOutputStream());
+		handler.setUserDAO(this.userDAO);
+		handler.setFilesDAO(this.filesDAO);
+		handler.setUserFilesDAO(this.userFilesDAO);
+		return handler;
 	}
 
 	public ExecutorService getExecutor() {
@@ -76,14 +75,6 @@ public class Server implements Runnable {
 
 	public void setServerSocket(ServerSocket serverSocket) {
 		this.serverSocket = serverSocket;
-	}
-
-	public ClientHandler getHandler() {
-		return handler;
-	}
-
-	public void setHandler(ClientHandler handler) {
-		this.handler = handler;
 	}
 
 	public UserDAO getUserDAO() {
@@ -108,6 +99,10 @@ public class Server implements Runnable {
 
 	public void setUserFilesDAO(UserFilesDAO userFilesDAO) {
 		this.userFilesDAO = userFilesDAO;
+	}
+
+	public void setPort(int port) {
+		this.port = port;;		
 	}
 
 }
