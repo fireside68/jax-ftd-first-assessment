@@ -1,6 +1,5 @@
 package com.cooksys.ftd.assessment.filesharing.dao;
 
-import java.sql.Blob;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -20,7 +19,6 @@ public class FilesDAO extends AbstractDAO {
 	private int fileID;
 	private String filepath;
 	private byte[] fileContents;
-	private Blob blob;
 	private Files files;
 	private List<Files> filesList;
 
@@ -39,17 +37,17 @@ public class FilesDAO extends AbstractDAO {
 
 		this.rs = stmt.getGeneratedKeys();
 		while (rs.next()) {
-			file.setFileID(rs.getInt(1));
-			file.setFilepath(rs.getString(2));
-			file.setFileContents(rs.getBytes(3));
+			file.setFileID(rs.getInt("file_id"));
+			file.setFilepath(rs.getString("file_path"));
+			file.setFileContents(rs.getBytes("file_contents"));
 		}
 		return file;
 	}
 
-	public Optional<Files> getFilesByID(int fileID) {
+	public Optional<Files> getFileID(int fileID) {
 		this.files = new Files();
 		try {
-		this.stmt = getConn().prepareStatement("select from files file_id where file_id = '?'");
+		this.stmt = getConn().prepareStatement("select from files (file_id) where file_id = '?'");
 		stmt.setInt(1, getFileID());
 		this.rs = stmt.executeQuery();
 		while(rs.next()){
@@ -60,6 +58,33 @@ public class FilesDAO extends AbstractDAO {
 		return Optional.ofNullable(files);
 		}catch (SQLException e){
 		return Optional.ofNullable(null);
+		}
+	}
+	
+	public String geFileByPath(String filePath) {
+		this.files = new Files();
+		try {
+		this.stmt = getConn().prepareStatement("select from files (file_path) where file_path = '?'");
+		stmt.setString(1, getFilepath());
+		this.rs = stmt.executeQuery();
+		rs.next();
+		return rs.getString("file_path");
+		}catch (SQLException e){
+		return "FILE NOT FOUND";
+		}
+	}
+	
+	public byte[] getFileContentsbyFileID() {
+		this.files = new Files();
+		try {
+		this.stmt = getConn().prepareStatement("select from files (file_id) where file_id = '?'");
+		stmt.setInt(1, getFileID());
+		this.rs = stmt.executeQuery();
+		rs.next();
+		byte[] arr = rs.getBytes("file_contents");
+		return arr;
+		}catch (SQLException e){
+			return null;
 		}
 	}
 	

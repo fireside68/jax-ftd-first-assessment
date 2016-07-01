@@ -44,7 +44,6 @@ public class ClientHandler implements Runnable, Closeable {
 	@Override
 	public void run() {
 		try {
-			log.info("handling client {}", this.client.getRemoteSocketAddress());
 			String connected = this.reader.readLine();
 			log.info("{}", connected);
 		} catch (IOException e) {
