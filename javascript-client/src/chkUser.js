@@ -1,11 +1,5 @@
-let chkUser = function (args, obj) {
-  for (let args in obj) {
-    if (!obj.hasOwnProperty(args)) {
-      return false
-    } else {
-      return true
-    }
-  }
+let chkUser = function (args, arr) {
+  return arr.includes(args)
 }
 
 module.exports = chkUser

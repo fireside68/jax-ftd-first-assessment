@@ -13,7 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.cooksys.ftd.assessment.filesharing.model.Files;
 
-@XmlRootElement
+@XmlRootElement (name = "Files")
 public class FilesDAO extends AbstractDAO {
 
 	private int fileID;
@@ -86,9 +86,10 @@ public class FilesDAO extends AbstractDAO {
 		}catch (SQLException e){
 			return null;
 		}
+		
 	}
 	
-	@XmlAttribute
+	@XmlAttribute (name = "file_id")
 	public int getFileID() {
 		return fileID;
 	}
@@ -96,7 +97,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFileID(int fileID) {
 		this.fileID = fileID;
 	}
-	@XmlElement
+	@XmlElement (name = "file_path")
 	public String getFilepath() {
 		return filepath;
 	}
@@ -104,7 +105,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFilepath(String filepath) {
 		this.filepath = filepath;
 	}
-	@XmlElement
+	@XmlElement (name = "Files")
 	public Files getFiles() {
 		return files;
 	}
@@ -112,7 +113,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFiles(Files files) {
 		this.files = files;
 	}
-	@XmlElement
+	@XmlElement (name = "Files_List")
 	public List<Files> getFilesList() {
 		return filesList;
 	}
@@ -120,7 +121,7 @@ public class FilesDAO extends AbstractDAO {
 	public void setFilesList(List<Files> filesList) {
 		this.filesList = filesList;
 	}
-	@XmlElement
+	@XmlElement (name = "file_contents")
 	public byte[] getFileContents() {
 		return fileContents;
 	}

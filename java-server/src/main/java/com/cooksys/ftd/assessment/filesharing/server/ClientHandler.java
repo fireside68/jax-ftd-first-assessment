@@ -6,20 +6,15 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
-import java.io.StringReader;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.util.HashMap;
-import java.util.Map;
 
-import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
-import javax.xml.bind.Marshaller;
-import javax.xml.bind.Unmarshaller;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.cooksys.ftd.assessment.filesharing.api.RegisterUser;
 import com.cooksys.ftd.assessment.filesharing.dao.FilesDAO;
 import com.cooksys.ftd.assessment.filesharing.dao.UserDAO;
 import com.cooksys.ftd.assessment.filesharing.dao.UserFilesDAO;
@@ -38,6 +33,7 @@ public class ClientHandler implements Runnable, Closeable {
 	private UserFilesDAO userFilesDAO;
 	private FilesDAO filesDAO;
 	private String username;
+	private RegisterUser registerUser;
 	
 	public ClientHandler() {
 		super();
@@ -54,23 +50,13 @@ public class ClientHandler implements Runnable, Closeable {
 	public void run() {
 		try {
 			String connected = this.reader.readLine();
-			log.info("Received input");
-			ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
-			//InputStream iStream = classLoader.getResourceAsStream("");
-			
-			Map<String, Object> properties = new HashMap<String, Object>();
-			properties.put("eclipse.persistence.jaxb", "application/json");
-			
-			JAXBContext jaxbContext = JAXBContext.newInstance(User.class);
-		    Unmarshaller jaxbUnmarshaller = jaxbContext.createUnmarshaller();
-			 
-		    jaxbUnmarshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-		    StringReader json = new StringReader(connected);
-		    User u = (User) jaxbUnmarshaller.unmarshal(json);
-		    log.info("{}", u);
+			log.info("Received input: {}", connected);
+			User temp = registerUser.unmarshall(connected);
+			log.info("{}", temp);
+
 			
 		} catch (IOException | JAXBException e) {
-			log.error("We have an error somewhere...", e);
+			log.error("Stream reading error...", e);
 		}
 
 	}

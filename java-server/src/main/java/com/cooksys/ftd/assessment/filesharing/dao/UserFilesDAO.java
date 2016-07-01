@@ -17,7 +17,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import com.cooksys.ftd.assessment.filesharing.model.Files;
 import com.cooksys.ftd.assessment.filesharing.model.User;
 
-@XmlRootElement
+@XmlRootElement (name = "user_file")
 public class UserFilesDAO extends AbstractDAO {
 	
 	private int userID;
@@ -51,7 +51,7 @@ public class UserFilesDAO extends AbstractDAO {
 		return null;
 	}
 	
-	@XmlAttribute
+	@XmlAttribute (name = "user_id")
 	public int getUserID() {
 		return userID;
 	}
@@ -60,7 +60,7 @@ public class UserFilesDAO extends AbstractDAO {
 		this.userID = userID;
 	}
 	
-	@XmlAttribute
+	@XmlAttribute (name = "file_id")
 	public int getFileID() {
 		return fileID;
 	}

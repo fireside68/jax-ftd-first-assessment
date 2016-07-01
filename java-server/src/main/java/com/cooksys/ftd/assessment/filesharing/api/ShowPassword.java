@@ -1,12 +1,29 @@
 package com.cooksys.ftd.assessment.filesharing.api;
 
-import java.io.File;
-
-import javax.xml.bind.JAXBContext;
-import javax.xml.bind.JAXBException;
-import javax.xml.bind.Unmarshaller;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
 public class ShowPassword {
+	
+	private String password;
+	private PreparedStatement stmt;
+	private Connection conn;
+	
+	public String getUserByPassword(String password) throws SQLException {
+		
+		String user;
+		this.stmt = this.conn.prepareStatement("select from user (username) where password = '?'");
+		stmt.setString(1, password);
+		ResultSet rs = stmt.executeQuery();
+		while (rs.next()) {
+			user = (rs.getString("username"));
+			return user;
+		}
+		
+		return "USER NOT FOUND";
+	}
 	
 //	try {    
 //        File file = new File("employee.xml");    

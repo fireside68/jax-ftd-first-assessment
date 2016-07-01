@@ -12,7 +12,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 
 import com.cooksys.ftd.assessment.filesharing.model.User;
 
-@XmlRootElement
+@XmlRootElement (name = "User")
 public class UserDAO extends AbstractDAO {
 
 	private int userID;
@@ -24,20 +24,21 @@ public class UserDAO extends AbstractDAO {
 	private ResultSet rs;
 
 	public User createUser(User user) throws SQLException {
+		User resultingUser = new User();
 		this.stmt = getConn().prepareStatement("insert into user (user_id, username, password) " + "values (?, ?, ?)",
 				PreparedStatement.RETURN_GENERATED_KEYS);
-		this.stmt.setInt(1, getUserID());
-		this.stmt.setString(2, getUsername());
-		this.stmt.setString(3, getPassword());
+		this.stmt.setInt(1, user.getUserID());
+		this.stmt.setString(2, user.getUsername());
+		this.stmt.setString(3, user.getPassword());
 		this.stmt.executeUpdate();
 
 		this.rs = stmt.getGeneratedKeys();
 		while (rs.next()) {
-			user.setUserID(rs.getInt("user_id"));
-			user.setUsername(rs.getString("username"));
-			user.setPassword(rs.getString("password"));
+			resultingUser.setUserID(rs.getInt("user_id"));
+			resultingUser.setUsername(rs.getString("username"));
+			resultingUser.setPassword(rs.getString("password"));
 		}
-		return user;
+		return resultingUser;
 	}
 
 	public Optional<User> getUserByUsername(String username) {
@@ -83,7 +84,7 @@ public class UserDAO extends AbstractDAO {
 
 	}
 
-	@XmlAttribute
+	@XmlAttribute (name = "user_id")
 	public int getUserID() {
 		return userID;
 	}
@@ -92,7 +93,7 @@ public class UserDAO extends AbstractDAO {
 		this.userID = userID;
 	}
 
-	@XmlElement
+	@XmlElement (name = "username")
 	public String getUsername() {
 		return username;
 	}
@@ -101,7 +102,7 @@ public class UserDAO extends AbstractDAO {
 		this.username = username;
 	}
 
-	@XmlElement
+	@XmlElement (name = "password")
 	public String getPassword() {
 		return password;
 	}
