@@ -1,6 +1,6 @@
 package com.cooksys.ftd.assessment.filesharing.dao;
 
-@XmlRootElement
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -12,10 +12,12 @@ import java.util.TreeMap;
 
 import javax.xml.bind.annotation.XmlAttribute;
 import javax.xml.bind.annotation.XmlElement;
+import javax.xml.bind.annotation.XmlRootElement;
 
 import com.cooksys.ftd.assessment.filesharing.model.Files;
 import com.cooksys.ftd.assessment.filesharing.model.User;
 
+@XmlRootElement
 public class UserFilesDAO extends AbstractDAO {
 	
 	private int userID;
