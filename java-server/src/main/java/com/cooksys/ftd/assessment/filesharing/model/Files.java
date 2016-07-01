@@ -9,7 +9,6 @@ public class Files {
 	private byte[] fileContents;
 	public Files() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public Files(int fileID, String filepath, byte[] fileContents) {
 		this.fileID = fileID;

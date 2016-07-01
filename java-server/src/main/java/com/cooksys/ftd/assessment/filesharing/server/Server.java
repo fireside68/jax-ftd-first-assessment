@@ -6,6 +6,7 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
 import org.slf4j.Logger;
@@ -16,41 +17,41 @@ import com.cooksys.ftd.assessment.filesharing.dao.UserDAO;
 import com.cooksys.ftd.assessment.filesharing.dao.UserFilesDAO;
 
 public class Server implements Runnable {
+
+	private static final boolean alive = false;
+
 	private Logger log = LoggerFactory.getLogger(Server.class);
 
 	private ExecutorService executor;
 	private ServerSocket serverSocket;
-
+	private ClientHandler handler;
+	private UserDAO userDAO;
 	private FilesDAO filesDAO;
 	private UserFilesDAO userFilesDAO;
-	private UserDAO userDAO;
-	
+
+	public Server() {
+		super();
+
+	}
+
 	@Override
 	public void run() {
-		try {
+		try (ServerSocket serverSocket = new ServerSocket(667)) {
+
 			while (true) {
-				Socket socket = this.serverSocket.accept();
-				ClientHandler handler = this.createClientHandler(socket);
+				Socket clientSocket = serverSocket.accept();
+				handler = new ClientHandler(clientSocket);
+				this.userDAO = handler.getUserDAO();
+				this.filesDAO = handler.getFilesDAO();
+				this.userFilesDAO = handler.getUserFilesDAO();
+				this.log.info("Client connected {}", clientSocket.getRemoteSocketAddress());
+				
+				
 				this.executor.execute(handler);
 			}
 		} catch (IOException e) {
-			this.log.error("The server encountered a fatal error while listening for more connections. Shutting down after error log.", e);
+
 		}
-	}
-	
-	public ClientHandler createClientHandler(Socket socket) throws IOException {
-		ClientHandler handler = new ClientHandler();
-
-		BufferedReader reader = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-		handler.setReader(reader);
-		PrintWriter writer = new PrintWriter(socket.getOutputStream());
-		handler.setWriter(writer);
-
-		handler.setUserDAO(userDAO);
-		handler.setUserFilesDAO(userFilesDAO);
-		handler.setUserDAO(userDAO);
-
-		return handler;
 	}
 
 	public Logger getLog() {
@@ -77,6 +78,22 @@ public class Server implements Runnable {
 		this.serverSocket = serverSocket;
 	}
 
+	public ClientHandler getHandler() {
+		return handler;
+	}
+
+	public void setHandler(ClientHandler handler) {
+		this.handler = handler;
+	}
+
+	public UserDAO getUserDAO() {
+		return userDAO;
+	}
+
+	public void setUserDAO(UserDAO userDAO) {
+		this.userDAO = userDAO;
+	}
+
 	public FilesDAO getFilesDAO() {
 		return filesDAO;
 	}
@@ -93,13 +110,4 @@ public class Server implements Runnable {
 		this.userFilesDAO = userFilesDAO;
 	}
 
-	public UserDAO getUserDAO() {
-		return userDAO;
-	}
-
-	public void setUserDAO(UserDAO userDAO) {
-		this.userDAO = userDAO;
-	}
-	
-	
 }

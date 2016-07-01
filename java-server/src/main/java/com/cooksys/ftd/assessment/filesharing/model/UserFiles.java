@@ -4,9 +4,9 @@ public class UserFiles {
 	
 	private int userID;
 	private int fileID;
+	
 	public UserFiles() {
 		super();
-		// TODO Auto-generated constructor stub
 	}
 	public UserFiles(int userID, int fileID) {
 		this.userID = userID;
