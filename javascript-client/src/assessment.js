@@ -3,25 +3,24 @@ import vorpal from 'vorpal'
 import fs from 'fs'
 import bcrypt from 'bcryptjs'
 
-const chkUser = require ('./chkUser')
+const chkUser = require('./chkUser')
 
-const hashPWD =function (args) {
+const hashPWD = function (args) {
   var salt = bcrypt.genSaltSync(10)
   var hash = bcrypt.hashSync(args, salt)
   return hash
 }
 
 const comparePWD = function (clean, jumbled) {
-    return bcrypt.compareSync(clean, jumbled)
+  return bcrypt.compareSync(clean, jumbled)
 }
 const assessment = vorpal()
-const fs = require('fs')
 
 let database = []
 let server
 let port = 667
 let host = 'localhost'
-let loggedIn = false;
+let loggedIn = false
 assessment
   .delimiter('$up3rcal1: ')
 
@@ -33,19 +32,17 @@ assessment
       assessment.log('Username already exists.  Try again.')
     } else {
       var user = args.username
-      var hash = hashPWD (args.password)
+      var hash = hashPWD(args.password)
       database.push(args.username, hash)
     }
     server = net.createConnection(port, host, () =>
       server.write(`${JSON.stringify({User: {user: user, password: hash}})}\n`))
-      server.on('data', (data, dt) =>
+    server.on('data', (data, dt) =>
         assessment.log(data.toString()))
-      server.on('end', () =>
+    server.on('end', () =>
         server.end())
-      callback()
-      })
-
-
+    callback()
+  })
 
 assessment
   .command('login <username> <password>')
@@ -61,40 +58,36 @@ assessment
       loggedIn = true
       server = net.createConnection(port, host, () =>
       server.write(`${JSON.stringify({User: {user: user, password: hash}})}\n`))
-      server.end()
     }
     callback()
   })
 
-  assessment
+assessment
     .command('files')
     .description('Gets a list of files from the server')
     .alias('list', 'f')
     .action(function (command, args, callback) {
-      if(loggedIn !== true) {
+      if (loggedIn !== true) {
         assessment.write('You are not logged in; you cannot access this command.')
-        callback()
       } else {
         server = net.createConnection(port, host, () =>
       server.write(`${command}`))
-      server.on('data', (data, dt) =>
-        fs.readFileSync(data)
-      server.on('end', () =>
-        server.end())
+        server.on('data', (data, dt) =>
+          assessment.log(data.toString()))
+        server.on('end', () =>
+          server.end())
       }
       loggedIn = false
       server.end()
       callback()
     })
-
-    assessment
+assessment
       .command('upload <fileID> [filePath]')
       .description('Allows user to upload file to server')
       .alias('up')
       .action(function (command, args, callback) {
-        if(loggedIn !== true) {
+        if (loggedIn !== true) {
           assessment.write('You are not logged in; you cannot access this command.')
-          callback()
         } else {
           server = net.createConnection(port, host, () =>
           server.write(`${command}`))
@@ -102,29 +95,27 @@ assessment
             assessment.log(data.toString()))
           server.on('end', () =>
             server.end())
-          }
-          loggedIn = false
-          server.end()
-          callback()
-        })
-
-        assessment
+        }
+        loggedIn = false
+        server.end()
+        callback()
+      })
+assessment
           .command('download <fileID> [filePath]')
           .description('Allows user to upload file to server')
           .alias('dl')
           .action(function (command, args, callback) {
-            if(loggedIn !== true) {
+            if (loggedIn !== true) {
               assessment.write('You are not logged in; you cannot access this command.')
-              callback()
             } else {
               server = net.createConnection(port, host, () =>
               server.write(`${command}`))
               server.on('data', (data, dt) =>
-                assessment.log(data.toString()))
+                fs.writeFileSync(data))
               server.on('end', () =>
                 server.end())
             }
-            loggedIn = false;
+            loggedIn = false
             server.end()
             callback()
           })
